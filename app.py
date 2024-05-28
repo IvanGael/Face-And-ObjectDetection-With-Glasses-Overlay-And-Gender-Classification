@@ -119,7 +119,7 @@ def main():
         # Write the frame to the output video file
         out.write(frame)
 
-        cv2.imshow('Face Detection with Glasses Overlay', frame)
+        cv2.imshow('Face and Object Detection with Glasses Overlay', frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
