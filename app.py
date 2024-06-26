@@ -120,10 +120,10 @@ def main():
     glasses_path = 'glasses.png'
     face_filter = FaceFilter(model_path, glasses_path)
 
-    cap = cv2.VideoCapture("video2.mp4")
+    cap = cv2.VideoCapture("video.mp4")
     fps = cap.get(cv2.CAP_PROP_FPS)
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter('output2.avi', fourcc, fps, (int(cap.get(3)), int(cap.get(4))))
+    out = cv2.VideoWriter('output.avi', fourcc, fps, (int(cap.get(3)), int(cap.get(4))))
 
     while True:
         ret, frame = cap.read()
