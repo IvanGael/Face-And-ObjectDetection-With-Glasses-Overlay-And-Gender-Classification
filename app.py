@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import torch
+from deepface import DeepFace
 
 class FaceFilter:
     def __init__(self, model_path, glasses_path, conf_threshold=0.9, nms_threshold=0.3, top_k=5000):
@@ -75,7 +76,28 @@ class FaceFilter:
             # Apply glasses to the face using eye landmarks
             output = self.apply_glasses(output, self.glasses, eye_left, eye_right)
 
+            # Extract face region for gender detection
+            x, y, w, h = face[:4].astype(int)
+            face_region = image[y:y+h, x:x+w]
+            if face_region.size > 0:
+                try:
+                    gender = self.detect_gender(face_region)
+                    gender_text = max(gender, key=gender.get)  # Get the gender with the highest probability
+                    cv2.putText(output, gender_text, (x, y - 60), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+                except Exception as e:
+                    print(f"Error detecting gender: {str(e)}")
+
         return output
+
+    def detect_gender(self, face_image):
+        # Use DeepFace to analyze the face and detect gender
+        result = DeepFace.analyze(face_image, actions=['gender'], enforce_detection=False)
+        if isinstance(result, list) and len(result) > 0:
+            return result[0]['gender']
+        elif isinstance(result, dict):
+            return result['gender']
+        else:
+            return {"Unknown": 1.0}
 
     def visualize_objects(self, image, results):
         # Draw bounding boxes and labels 
@@ -98,10 +120,10 @@ def main():
     glasses_path = 'glasses.png'
     face_filter = FaceFilter(model_path, glasses_path)
 
-    cap = cv2.VideoCapture("video.mp4")
+    cap = cv2.VideoCapture("video2.mp4")
     fps = cap.get(cv2.CAP_PROP_FPS)
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter('output.avi', fourcc, fps, (int(cap.get(3)), int(cap.get(4))))
+    out = cv2.VideoWriter('output2.avi', fourcc, fps, (int(cap.get(3)), int(cap.get(4))))
 
     while True:
         ret, frame = cap.read()

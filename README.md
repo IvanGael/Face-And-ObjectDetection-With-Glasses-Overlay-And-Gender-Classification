@@ -1,3 +1,24 @@
-Face and object detection with glasses overlay
+# Face and Object Detection with Gender Classification
 
-This project uses OpenCV to find faces in live video from a webcam and adds glasses to them in real-time. Then, it saves the video with the glasses added.
+## Overview
+A real-time face and object detection with gender classification and virtual glasses overlay. 
+
+![Demo](demo.png)
+
+
+## Features
+- Face detection using OpenCV's YuNet model
+- Gender classification using DeepFace
+- Virtual glasses overlay on detected faces
+- Object detection using YOLOv5
+
+## Requirements
+- OpenCV
+- NumPy
+- PyTorch
+- DeepFace
+
+
+````
+pip install -r requirements.txt
+````
