@@ -1,1 +1,3 @@
-yolov5s.pt
+*.pt
+outputt.avi
+output2.mp4
